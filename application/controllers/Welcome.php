@@ -295,9 +295,11 @@ class Welcome extends CI_Controller {
 		$i =0;
 		foreach ($DrillmasterList->result_array() as $row)
         {
-			$TDM_DM_Assignaccount[$i] = $row['DM_account'];
-			$TDM_DM_Assignname[$i] = $row['DM_name'];
-			$i++;
+        	if ($row['active'] != 0){
+				$TDM_DM_Assignaccount[$i] = $row['DM_account'];
+				$TDM_DM_Assignname[$i] = $row['DM_name'];
+				$i++;
+			}
 		}
 
 		$this->load->view('header');
@@ -313,7 +315,35 @@ class Welcome extends CI_Controller {
 		));
 		$this->load->view('footer');
 	}
+	public function AssignDrillmasterUpdate($tmp){
+		$this->load->model('LoadingData');
+		$query = $this->LoadingData->getDrillmaster();
+		$i = 0;
+		foreach ($query->result_array() as $row)
+        {
+   
+        	$DM_Id[$i] = $row['DM_Id'];
+        	$DM_account[$i] = $row['DM_account'];
+        	$i++;
+		}
+		for ($i = 0 ; $i < $tmp ; $i++){
+			$user_Id = $this->input->post('users_'.$i);
+			$selectDrillmaster = $this->input->post('selectUser_'.$i);
+			$select_DM_Id = 0 ;
+			for ($j=0;$j<count($DM_account);$j++){
+				if ($DM_account[$j] == $selectDrillmaster){
+					$select_DM_Id = $DM_Id[$j];
+					break;
+				}
+			}
 
+
+
+			$this->load->model('Mod_Update');
+     		$this->Mod_Update->UpdateAssignDillmaster($select_DM_Id, $user_Id);
+		}
+		header('Location:' .base_url('welcome/AssignDillmaster/read'));
+	}
 
 
 	/*

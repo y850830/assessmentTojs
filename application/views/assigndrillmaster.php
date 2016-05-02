@@ -1,8 +1,10 @@
-<form class="form-horizontal" role="form" action="<?php echo base_url('');?>" method="post">
+<form class="form-horizontal" role="form" action="<?php echo base_url('welcome/AssignDrillmasterUpdate/'.count($TDM_user_name));?>" method="post">
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">校安人員管理</h1>
+                
+
                 <?php
                     if ($Tedit == "read"){
                        echo '<a type="button" class="btn btn-default btn-circle btn-lg"';
@@ -24,6 +26,7 @@
                
                
                ?>
+               
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -79,11 +82,12 @@
                               //    echo "</tr>";
                               // }
                            }else if ($Tedit == "edit"){
-                           		 for ($i = 0 ; $i < count($TDM_user_name) ; $i++){
+                           		 for ($i = 0 ; $i < count($TDM_user_name); $i++){
                            		 		echo "<tr>";
                            		 		echo "<td>".($i+1)."</td>";
                            		 		echo "<td>".$TDM_user_name[$i]."</td>";
-                           		 		echo "<td><select class='form-control' name='selectUser'>";
+                           				echo "<input id='users_".$i."' name='users_".$i."' value='".$TDM_user_Id[$i]."' type='hidden'></input>";
+                           		 		echo "<td><select class='form-control' name='selectUser_".$i."'>";
 
                            		 		echo "<option value='".$TDM_DM_account[$i]."'>".$TDM_DM_name[$i]."</option>";
                            		 		for ($j = 0 ; $j < count($TDM_DM_Assignaccount) ;$j++)
@@ -141,6 +145,27 @@
                            <tr> -->
                             </tbody>
                         </table>
+                        <?php
+                    if ($Tedit == "read"){
+                       echo '<a type="button" class="btn btn-default btn-circle btn-lg"';
+                       echo 'href='.base_url('welcome/AssignDillmaster/edit').'>';
+                       echo '<i class="fa fa-list"></i></a>';
+                    
+                       echo '<a type="button" class="btn btn-primary btn-circle btn-lg" onclick="javascript:Add(this.id);"';
+                       //echo 'href='.base_url('welcome/DrillmasterListAdd').'>';
+                       echo '>';
+                       echo '<i class="fa fa-plus"></i></a>';
+                       
+                    }else if ($Tedit == "edit"){
+                       echo "<a type='button' class='btn btn-danger btn-circle btn-lg' href='".base_url('welcome/AssignDillmaster/read')."'";
+                       echo '><i class="fa fa-times"></i></a>';
+                       echo '<button type="submit" class="btn btn-success btn-circle btn-lg" onclick=""';
+                      // echo 'href='.base_url('welcome/DrillmasterList').'>';
+                       echo '><i class="fa fa-check"></i></button>';
+                    }
+               
+               
+               ?>
                     </div>
                 </div>
                 <!-- /.panel-body -->

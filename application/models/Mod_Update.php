@@ -62,6 +62,13 @@
             return true;
 
         }
+
+        function UpdateAssignDillmaster($DM_Id,$user_Id){
+           // echo $DM_Id."   ".$user_Id."<br>";
+
+            $this->db->where('user_Id',$user_Id);
+            $this->db->update('users', Array('DM_Id'=>$DM_Id));
+        }
    //     	function UpdateDrillmasterPassword($account,$data){
    //     		$this->db->where('DM_account',$account);
 			// $this->db->update('drillmaster', $data);
