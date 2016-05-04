@@ -77,10 +77,6 @@
                 <select class="form-control" id="selectYear" name="selectYear">
                         <?php 
                         	
-                        	// for ($i=0;$i<count($TDM_year);$i++)
-                            
-                            // 
-                            // 
                             if ($_SESSION['empty']!=1){
                         	   $tmp = count($TDM_year);
                         	   for ($i=$TDM_year[$tmp-1]+1; $i<=108 ; $i++){
@@ -98,15 +94,7 @@
 
                         ?>
                 </select>
-                <!--     帳號 <input class="form-control" id="Add_account" name="Add_account" required> 
-                    密碼 <input class="form-control" id="Add_password" name="Add_password" type="password" required> 
-                    密碼確認 <input class="form-control" id="Add_password2" name="Add_password2" type="password" required> 
-                    姓名<input class="form-control" id = "Add_name" name="Add_name" required> 
-                    職稱<input class="form-control" id = "Add_position" name="Add_position" required> 
-                    分機<input class="form-control" id = "Add_adminphone" name="Add_adminphone" required> 
-                    手機<input class="form-control" id = "Add_phone" name="Add_phone" required > 
-                    <label for="Add_email" class="sr-only">Email address</label>
-                    email<input class="form-control" id="Add_email" name="Add_email" type="email" required autofocus> -->
+              
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

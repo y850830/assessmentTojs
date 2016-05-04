@@ -37,7 +37,7 @@ class Welcome extends CI_Controller {
 			//echo  $_SESSION["name"];
 			$this->load->view('header');
 			$this->load->view('navbar');
-		//	$this->load->view('welcome_message');
+			$this->load->view('welcome');
 			$this->load->view('footer');
 
 		}
@@ -49,25 +49,65 @@ class Welcome extends CI_Controller {
 		評核表房子清單，已經有指定的負責校安人員才顯示。
 		Resource from view_house
 	 */
-	public function HouseList(){
+	public function HouseList($year){
+	
 
 		$this->load->model('LoadingData');
-		$houselist = $this->LoadingData->getHouselist();
+		
 		$i =0;
 
-		foreach ($houselist->result_array() as $row)
+		
+
+        if (($year == "check") || ($year == "noncheck"))
         {
-        	$TDM_year[$i] = $row['year'];
-        	$TDM_houseId[$i] = $row['houseId'];
-        	$TDM_address[$i] = $row['address'];
-        	$TDM_username[$i] = $row['username'];
-        	$TDM_DM_NAME[$i] = $row['DM_NAME'];
-        	$TDM_school[$i] = $row['school'];
-        	$TDM_assessTime[$i] = $row['assessTime'];
-        	$TDM_update_status[$i] = $row['update_status'];
-        	$TDM_assess_status[$i] = $row['assess_status'];
-        	$i++;
+        	$houselist = $this->LoadingData->getHouselist($_SESSION['years_assesstable']);
+        	$status = array(
+        		'check' => 1,
+        		'noncheck' => 0
+        	);
+        	foreach ($houselist->result_array() as $row){
+        		if (  $row['update_status'] == $status[$year]){
+        			$TDM_year[$i] = $row['year'];
+        			$TDM_houseId[$i] = $row['houseId'];
+        			$TDM_address[$i] = $row['address'];
+        			$TDM_username[$i] = $row['username'];
+        			$TDM_DM_NAME[$i] = $row['DM_NAME'];
+        			$TDM_school[$i] = $row['school'];
+        			$TDM_assessTime[$i] = $row['assessTime'];
+        			$TDM_update_status[$i] = $row['update_status'];
+        			$TDM_assess_status[$i] = $row['assess_status'];
+        			$i++;
+        		}
+            }
+            $TDM_Assesstableyear = 0;
         }
+        else
+        {
+        	$houselist = $this->LoadingData->getHouselist($year);
+        	foreach ($houselist->result_array() as $row){
+        		$TDM_year[$i] = $row['year'];
+        		$TDM_houseId[$i] = $row['houseId'];
+        		$TDM_address[$i] = $row['address'];
+        		$TDM_username[$i] = $row['username'];
+        		$TDM_DM_NAME[$i] = $row['DM_NAME'];
+        		$TDM_school[$i] = $row['school'];
+        		$TDM_assessTime[$i] = $row['assessTime'];
+        		$TDM_update_status[$i] = $row['update_status'];
+        		$TDM_assess_status[$i] = $row['assess_status'];
+        		$i++;
+        	}
+
+        	$this->load->model('LoadingData');
+			$assessyear = $this->LoadingData->getAssessHistory();
+			$j = 0;
+			foreach ($assessyear->result_array() as $row)
+        	{
+        		$TDM_Assesstableyear[$j] = $row['year'];
+        		$j++;
+        	}
+        }
+        
+
 		$this->load->view('header');
 		$this->load->view('navbar');
 
@@ -81,7 +121,9 @@ class Welcome extends CI_Controller {
 				"TDM_school" => $TDM_school,
 				"TDM_assessTime" => $TDM_assessTime,
 				"TDM_update_status" => $TDM_update_status,
-				"TDM_assess_status" => $TDM_assess_status
+				"TDM_assess_status" => $TDM_assess_status,
+				"TDM_Assesstableyear" =>$TDM_Assesstableyear,
+				"currentYear" => $year
 			));
 			$_SESSION['empty'] = 0; 
 		}
@@ -93,7 +135,12 @@ class Welcome extends CI_Controller {
 		
 		$this->load->view('footer');
 	}
+	// public function HouseListCheck(){
 
+	// }
+	// public function HouseListNonCheck(){
+
+	// }
 
 	/*
 		更新評和表資料
@@ -147,7 +194,7 @@ class Welcome extends CI_Controller {
 		);
 		$this->load->model('Mod_Update');
      	$this->Mod_Update->UpdateAssessTable($md5assessId,$data);
-     	header('Location:' .base_url('welcome/HouseList'));
+     	header('Location:' .base_url('welcome/HouseList/'.$_SESSION['years_assesstable']));
 
 	}
 
@@ -246,12 +293,17 @@ class Welcome extends CI_Controller {
 
 		$this->load->view('header');
 		$this->load->view('navbar');
-		if ($i!=0)
+		if ($i!=0){
 			$this->load->view('assesshistory',array(
 			"TDM_year" => $TDM_year
 			));
+			$_SESSION['empty'] = 0;
+		}
 		else
+		{
 			$this->load->view('assesshistory');
+			$_SESSION['empty'] = 1;
+		}
 		$this->load->view('footer');
 
 	}
@@ -264,7 +316,7 @@ class Welcome extends CI_Controller {
 		$year = $this->input->post('selectYear');
 		$this->load->model('LoadingData');
 		$this->LoadingData->CreateHouseAssessInfo($year);
-		sleep(3000);
+		sleep(5);
 		header('Location:' .base_url('welcome/AssessTableHistory'));
 	}
 
@@ -304,15 +356,26 @@ class Welcome extends CI_Controller {
 
 		$this->load->view('header');
 		$this->load->view('navbar');
-		$this->load->view('assigndrillmaster',array(
-			"Tedit" => $edit,
-			"TDM_user_name" => $TDM_user_name,
-			"TDM_user_Id" => $TDM_user_Id,
-			"TDM_DM_name" => $TDM_DM_name,
-			"TDM_DM_account"=>$TDM_DM_account,
-			"TDM_DM_Assignaccount" =>$TDM_DM_Assignaccount,
-			"TDM_DM_Assignname" => $TDM_DM_Assignname,
-		));
+		if ($i!=0)
+			$this->load->view('assigndrillmaster',array(
+				"Tedit" => $edit,
+				"TDM_user_name" => $TDM_user_name,
+				"TDM_user_Id" => $TDM_user_Id,
+				"TDM_DM_name" => $TDM_DM_name,
+				"TDM_DM_account"=>$TDM_DM_account,
+				"TDM_DM_Assignaccount" =>$TDM_DM_Assignaccount,
+				"TDM_DM_Assignname" => $TDM_DM_Assignname,
+			));
+		else
+			$this->load->view('assigndrillmaster',array(
+				"Tedit" => 0,
+				"TDM_user_name" => 0,
+				"TDM_user_Id" => 0,
+				"TDM_DM_name" => 0,
+				"TDM_DM_account"=>0,
+				"TDM_DM_Assignaccount" =>0,
+				"TDM_DM_Assignname" => 0,
+			));
 		$this->load->view('footer');
 	}
 	public function AssignDrillmasterUpdate($tmp){
@@ -487,7 +550,7 @@ class Welcome extends CI_Controller {
 			);
 		$this->load->model('Mod_Update');
      	$this->Mod_Update->AddDrillmasterList($data);
-     	header('Location:' .base_url('welcome/DrillmasterList'));
+     	header('Location:' .base_url('welcome/DrillmasterList/read'));
 	}
 	
 }

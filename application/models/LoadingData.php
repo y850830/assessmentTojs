@@ -28,10 +28,13 @@
         /*
             取得檢視表內容
          */
-        public function getHouselist(){
+        public function getHouselist($year){
             $sitename = $_SESSION['sitename'] ;  
             $this->db->select("*");  
-            $query = $this->db->get_where("view_house",Array("school" => $sitename));  
+            $this->db->where(Array("school" => $sitename, "year" => $year));  
+            $this->db->order_by("assessTime", "desc");
+            $this->db->from('view_house');
+            $query = $this->db->get();
             return $query;
         }
 
@@ -61,7 +64,7 @@
             for ($i=0 ; $i<count($houseId);$i++){ 
                 $this->db->insert('assess',Array("site_name" =>$sitename,"houseId" =>$houseId[$i],"year" => $year));
             }
-            
+            $_SESSION['years_assesstable'] = $year;
         }
         public function getAssessTable($md5houseId){
             $sitename = $_SESSION['sitename'] ;  

@@ -22,6 +22,7 @@
             $_SESSION['authority'] = 0; //登入者權限
             $_SESSION['school'] = 0 ; //登入者學校中文全名
             $_SESSION['sitename'] = 0 ; //登入者學校英文縮寫
+            $_SESSION['years_assesstable'] = 0 ; //登入者學校目前最新評核表的年度
            // $this->load->library('googleplus');
 
         }
@@ -44,6 +45,13 @@
                 $_SESSION['school'] = $query2->row()->site_title;
                 $_SESSION['sitename'] = $query2->row()->site_name;// 英文縮寫
                 echo $_SESSION['school'];
+
+                $this->db->select("max(year) as year");
+                $query2 = $this->db->get_where("assess_history",Array("site_name" => $_SESSION['sitename']));
+                if($query2->row()->year)
+                    $_SESSION['years_assesstable'] = $query2->row()->year;
+                else
+                    $_SESSION['years_assesstable'] = 0 ;
                 return true;
 
             }else{  

@@ -103,13 +103,14 @@
                             <a href="<?php echo base_url(); ?>"><i class="fa fa-dashboard fa-fw"></i> 首頁</a>
                         </li>
                         <li>
-                            <a href="<?php echo base_url('welcome/HouseList'); ?>"><i class="fa fa-bar-chart-o fa-fw"></i> 評核列表<span class="fa arrow"></span></a>
+                            
+                            <a href="<?php echo base_url('welcome/HouseList/'.$_SESSION['years_assesstable']); ?>"><i class="fa fa-bar-chart-o fa-fw"></i> 評核列表<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="/tables">已評核</a>
+                                    <a href="<?php echo base_url('welcome/HouseList/check'); ?>">已評核</a>
                                 </li>
                                 <li>
-                                    <a href="/tables">未評核</a>
+                                    <a href="<?php  echo base_url('welcome/HouseList/noncheck'); ?>">未評核</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo base_url('welcome/AssessTableHistory'); ?>">評核表建立</a>
