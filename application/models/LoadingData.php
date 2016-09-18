@@ -24,7 +24,33 @@
             //echo $query->row()->DM_account;
             return $query;
         }
+        public function getStatistics($status){
+            /*
+            
+            SELECT COUNT( assess_status ) 
+            FROM  `view_house` 
+            WHERE  `assess_status` =  '1'
+            AND  `year` =  '105'
+            AND  `school` =  'NFU'
+             */
+            $year = $_SESSION['years_assesstable'] ;
+            $sitename = $_SESSION['sitename'] ;  
+            $this->db->select("assess_status");
+            if ($status == 0){
+                
+                $this->db->where(Array("school"=> $sitename ,"year"=>$year,"assess_status"=>0));
+                $nonpass = $this->db->count_all_results('view_house');
+                return $nonpass;
+            }else if ($status == 1){
+                $this->db->where(Array("school"=> $sitename ,"year"=>$year,"assess_status"=>1));
+                $pass = $this->db->count_all_results('view_house');
+                return $pass;
+            }
 
+           
+
+
+        }
         /*
             取得檢視表內容
          */

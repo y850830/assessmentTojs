@@ -49,10 +49,11 @@
           </label>
 
         </div>
-          <select class='form-control' name='selectUser'>
+          <div name='selectUser' value="0"></div>
+         <!--  <select class='form-control' name='selectUser'>
             <option value='0'>管理者</option>
             <option value='1'>校安人員</option>
-          </select>
+          </select> -->
           <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 

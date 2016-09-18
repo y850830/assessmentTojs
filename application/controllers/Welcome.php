@@ -34,23 +34,32 @@ class Welcome extends CI_Controller {
 			$this->load->view('login');
 
 		}else{
-			//echo  $_SESSION["name"];
+			$this->load->model('LoadingData');
+
+			$nonpass = $this->LoadingData->getStatistics(0);
+			$pass = $this->LoadingData->getStatistics(1);
+
 			$this->load->view('header');
 			$this->load->view('navbar');
-			$this->load->view('welcome');
+			$this->load->view('welcome',array(
+				"nonpass" => $nonpass,
+				"pass" => $pass
+			));
+
 			$this->load->view('footer');
 
 		}
 		//echo $_SESSION["user"];
 	 
 	}
+	
 
 	/*
 		評核表房子清單，已經有指定的負責校安人員才顯示。
 		Resource from view_house
 	 */
 	public function HouseList($year){
-	
+		if(isset($_SESSION["LoginStatus"])== null)$this->load->view('login');
 
 		$this->load->model('LoadingData');
 		
@@ -316,7 +325,7 @@ class Welcome extends CI_Controller {
 		$year = $this->input->post('selectYear');
 		$this->load->model('LoadingData');
 		$this->LoadingData->CreateHouseAssessInfo($year);
-		sleep(5);
+		sleep(2);
 		header('Location:' .base_url('welcome/AssessTableHistory'));
 	}
 

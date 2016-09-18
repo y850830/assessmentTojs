@@ -2,6 +2,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12"> 
+
                 <h1 class="page-header">房子列表</h1>
                 <!-- <button type="button" class="btn btn-default btn-circle btn-lg"></button> -->
             </div>
@@ -20,7 +21,7 @@
                            if (($_SESSION['empty']!=1) && ($TDM_Assesstableyear!=0))
                                 echo  "<a href='".base_url('welcome/HouseList/'.($currentYear-1))."'aria-label='Previous'>"; 
 
-                        ?>
+                          ?>
                          <!--    <a href="#" aria-label="Previous"> -->
                               <span aria-hidden="true">&laquo;</span>
                             </a>
@@ -107,8 +108,7 @@
     <!-- /.page-wrapper -->
 </form>
 <script>
-    function sender(QQ){
+   
 
-        //console.log(QQ);
-    }
+
 </script>
